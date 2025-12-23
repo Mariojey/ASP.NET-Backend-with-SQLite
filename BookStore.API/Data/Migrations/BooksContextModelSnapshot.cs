@@ -60,6 +60,28 @@ namespace BookStore.API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BookTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Science Fiction"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Fantasy"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mystery"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Non-Fiction"
+                        });
                 });
 
             modelBuilder.Entity("BookStore.API.Entities.Book", b =>
