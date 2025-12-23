@@ -14,6 +14,7 @@ Content-Type: application/json
 {
     "title": "The Lord of the Rings",
     "author": "J.R.R. Tolkien",
+    "bookTypeId": 1,
     "price": 25.99,
     "publishedDate": "1954-07-29T00:00:00"
 }
