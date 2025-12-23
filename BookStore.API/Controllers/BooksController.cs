@@ -1,4 +1,7 @@
+using BookStore.API.Data;
 using BookStore.API.Dtos;
+using BookStore.API.Entities;
+using BookStore.API.Mapping;
 
 namespace BookStore.API.Controllers;
 
@@ -27,24 +30,24 @@ public static class BooksController
             }
             return Results.Ok(book);
         }).WithName("GetBookById");
-        
-        booksRouter.MapPost("/", (CreateBookDto newBook) =>
+
+        booksRouter.MapPost("/", (CreateBookDto newBook, BooksContext context) =>
         {
-            BookDto book = new BookDto(
-                books.Max(b => b.Id) + 1,
-                newBook.Title,
-                newBook.Author,
-                newBook.Price,
-                newBook.Type,
-                newBook.PublishedDate
-            );
-        
-            books.Add(book);
-        
-            return Results.CreatedAtRoute("GetBookById", new { id = book.Id }, book);
+
+            Book book = newBook.ToEntity();
+            book.BookType = context.BookTypes.Find(newBook.BookTypeId);
+
+
+
+            context.Books.Add(book);
+            context.SaveChanges();
+
+
+
+            return Results.CreatedAtRoute("GetBookById", new { id = book.Id }, book.ToDto());
         });
 
-        booksRouter.MapPut("/{id}", (int id, UpdateBookDto updatedBook) =>
+        booksRouter.MapPut("/{id}", (int id, UpdateBookDto updatedBook, BooksContext context) =>
         {
             var bookIndex = books.FindIndex(b => b.Id == id);
         
@@ -58,7 +61,7 @@ public static class BooksController
                 updatedBook.Title,
                 updatedBook.Author,
                 updatedBook.Price,
-                updatedBook.Type,
+                context.BookTypes.Find(updatedBook.BookTypeId)!.Name,
                 updatedBook.PublishedDate
             );
         
