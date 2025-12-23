@@ -5,6 +5,6 @@ public record class BookDto(
     string Title,
     string Author,
     decimal Price,
-    string Type,
+    string BookTypeName,
     DateTime PublishedDate
 );
